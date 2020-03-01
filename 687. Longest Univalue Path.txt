@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    
+    //这个global var很重要
+    int ans;
+    
+    public int longestUnivaluePath(TreeNode root) {
+        ans = 0;
+        count(root);
+        return ans;
+    }
+    
+    public int count(TreeNode node){
+        // 结束条件
+        if (node == null) return 0;
+        
+        //dfs
+        int left = count(node.left);
+        int right = count(node.right);
+        
+        int leftPath = 0;
+        int rightPath = 0;
+        
+        //左边不为空 并且 值相同， 左边+1
+        if(node.left != null && node.val == node.left.val){
+            leftPath = left + 1;
+        }
+        
+        //右边不为空 并且 值相同， 右边+1
+        if(node.right != null && node.val == node.right.val){
+            rightPath = right + 1;
+        }
+        
+        // 左边和右边的值相同，题目算 1 + 1 = 2
+        ans = Math.max(ans, leftPath + rightPath);
+        
+        // 返回拥有最大值得路径
+        return Math.max(leftPath, rightPath);
+           
+    }
+}
