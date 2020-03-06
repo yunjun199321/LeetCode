@@ -1,0 +1,53 @@
+class Solution {
+    // O(n^2) 解法
+    // eg: [-1, 0, 1, 2, -1, -4]
+    public List<List<Integer>> threeSum(int[] nums) {
+        // sort O(nlogn)
+        Arrays.sort(nums); // current: [-4, -1, -1, 0, 1, 2]
+        
+        List<List<Integer>> output_array = new LinkedList();
+        
+        // 这里注意是到倒数第三个元素，避免indexOutOfRange exception.
+        for(int i = 0; i < nums.length - 2; i++){
+            
+            // 后面的元素有可能可以组合，所以先跑一次。后面相同的元素就跳过避免重复
+            if(i == 0 || (i > 0 && nums[i] != nums[i-1])){
+                int low_index = i + 1;
+                int high_index = nums.length - 1;
+                int sum = -nums[i];
+
+                /* current: 
+                [-4, (-1, -1, 0, 1, 2)]
+                [-4, -1, (-1, 0, 1, 2)]
+                [-4, -1, -1, (0, 1, 2)]
+                [-4, -1, -1, 0, (1, 2)]
+                [-4, -1, -1, 0, 1, (2)] 
+                下面的代码主要处理括号里面的元素
+                */
+                
+                while(low_index < high_index){
+                    if(nums[low_index] + nums[high_index] == sum){
+                        // 把找到的元素添加到输出数组
+                        output_array.add(Arrays.asList(nums[i], nums[low_index], nums[high_index]));
+                        
+                        //相同元素选择跳过避免重复
+                        while(low_index < high_index && nums[low_index] == nums[low_index + 1]) low_index++;
+                        while(low_index < high_index && nums[high_index] == nums[high_index - 1]) high_index--;
+                        
+                        //跳过完相同的元素之后还要移动到新的元素上
+                        low_index++;
+                        high_index--;
+                    } else if(nums[low_index] + nums[high_index] > sum){
+                        // 结果太大，选小一点的元素
+                        high_index--;
+                    } else if(nums[low_index] + nums[high_index] < sum) {
+                        // 结果太小，选大一点的元素
+                        low_index++;
+                    }
+                }
+            }
+        }
+        
+        return output_array;
+    }
+}

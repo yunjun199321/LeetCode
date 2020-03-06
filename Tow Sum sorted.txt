@@ -1,0 +1,38 @@
+// HashMap解法, O(n), 实际比 2 pointers解法慢，虽然都是O(n)
+class Solution {
+    public int[] twoSum(int[] numbers, int target) { 
+        
+        // <value, index>
+        Map<Integer, Integer> helper_map = new HashMap();
+        int[] result = new int[2];
+        
+        for(int i = 0; i < numbers.length; i++){
+            if(helper_map.containsKey(numbers[i])){
+                result[0] = helper_map.get(numbers[i]) + 1;
+                result[1] = i + 1;
+            } else {
+                helper_map.put(target - numbers[i], i);
+            }
+        }
+        
+        return result;
+    }
+}
+
+// Two pointers 解法，也是O(n)，但是比较快。
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+           int low_index = 0;
+           int high_index = numbers.length - 1;
+           while (low_index < high_index){
+                if (numbers[low_index] + numbers[high_index] == target){
+                    break;
+                } else if (numbers[low_index] + numbers[high_index] > target){
+                    high_index--;
+                } else {
+                    low_index++;
+                }
+            }
+        return new int[] {low_index + 1, high_index + 1};
+    }
+}
