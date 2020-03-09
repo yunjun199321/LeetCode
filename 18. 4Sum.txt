@@ -1,0 +1,80 @@
+// first submission. 30ms, faster than 24.70%.
+
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new LinkedList();
+        if(nums.length < 4) return res;
+        Arrays.sort(nums);
+        
+        for(int i = 0; i < nums.length - 3; i++){
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+            
+            for(int j = i + 1; j < nums.length - 2; j++){
+                // similar to 3 sum.
+                if(j > i + 1 && nums[j] == nums[j - 1]) continue;
+                
+                int low = j + 1;
+                int high = nums.length - 1;
+                
+                while(low < high){
+                    int sum = nums[i] + nums[j] + nums[low] + nums[high];
+
+                    if(sum > target){
+                        high--;
+                    } else if(sum < target){
+                        low++;
+                    }else{
+                        res.add(Arrays.asList(nums[i], nums[j], nums[low], nums[high]));
+                        while(low < high && nums[low] == nums[low + 1]) low++;
+                        while(low < high && nums[high] == nums[high-1]) high--;
+                        low++;
+                        high--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+
+// second submit, 14ms beat 72%.
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(nums.length < 4) return result;
+        Arrays.sort(nums);
+        
+        for(int i = 0; i < nums.length-3; i++){
+            if(i == 0 || (i > 0 && nums[i] != nums[i-1])){
+                for(int j = i+1; j < nums.length-2; j++){
+                    if(j == i+1 || (j > i+1 && nums[j] != nums[j-1])){
+                        int low = j + 1;
+                        int high = nums.length-1;
+
+                        while(low < high){
+                            int sum = nums[i] + nums[j] + nums[low] + nums[high];
+                            if(sum == target){
+                                List<Integer> ans = new ArrayList<Integer>();
+                                ans.add(nums[i]);
+                                ans.add(nums[j]);
+                                ans.add(nums[low]);
+                                ans.add(nums[high]);
+                                result.add(ans);
+                                while(low < high && nums[low] == nums[low+1])low++;
+                                while(low < high && nums[high] == nums[high-1])high--;
+                                low++;
+                                high--;
+                            } else if(sum < target) {
+                                low++;
+                            } else {
+                                high--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+}
